@@ -1,0 +1,67 @@
+.package {
+	type 0 : integer
+	session 1 : integer
+}
+
+login 1 {
+	request {
+		username 0 : string
+		password 1 : string
+	}
+	response {
+		ok 0 : boolean	
+	}
+}
+
+set 2 {
+	request {
+		what 0 : string
+		value 1 : string
+	}
+}
+
+ping 3 {}
+
+rolename 4 {
+	response {
+		rolename 0 : string
+	}
+}
+
+register 5 {
+	request {
+		username 0 : string
+		password 1 : string
+	}
+	response {
+		ok 0 : boolean
+	}
+}
+
+rolecreate 6 {
+	request {
+		sex 1 : integer
+		rolename 2 :string
+	}
+	response {
+		ok 0 : boolean
+	}
+}
+
+rolelogin 7 {
+	response {
+		ok 0 : boolean
+		uid 1 : integer
+		sex 2 : integer
+		rolename 3 : string
+	}
+}
+
+matching 8 {
+	response {
+		ok 0 : boolean
+		uid 1 : integer
+		sex 2 : integer
+		rolename 3 : string
+	}
+}

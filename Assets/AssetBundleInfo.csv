@@ -1,0 +1,13 @@
+prompt,*.prefab,Assets/LuaFramework/Examples/Builds/Prompt
+message,*.prefab,Assets/LuaFramework/Examples/Builds/Message
+login,*.prefab,Assets/LuaFramework/Examples/Builds/Login
+createrole,*.prefab,Assets/LuaFramework/Examples/Builds/CreateRole
+mainscene,*.prefab,Assets/LuaFramework/Examples/Builds/MainScene
+war,*.prefab,Assets/LuaFramework/Examples/Builds/War
+baby_asset,*.jpg,Assets/LuaFramework/Examples/Textures/Shared/Baby
+war_asset,*.png,Assets/LuaFramework/Examples/Textures/War
+pprompt_asset,*.png,Assets/LuaFramework/Examples/Textures/Prompt
+shared_asset,*.png,Assets/LuaFramework/Examples/Textures/Shared
+login_asset,*.png,Assets/LuaFramework/Examples/Textures/Login
+createrole_asset,*.png,Assets/LuaFramework/Examples/Textures/CreateRole
+mainscene_asset,*.png,Assets/LuaFramework/Examples/Textures/MainScene
