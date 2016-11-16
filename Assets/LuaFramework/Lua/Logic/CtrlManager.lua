@@ -18,10 +18,10 @@ function CtrlManager.GetCtrl(ctrlName)
 	return ctrlList[ctrlName];
 end
 
-function CtrlManager.ShowPanel(panel)
+function CtrlManager.ShowPanel(panel, ...)
 	local ctrl = CtrlManager.GetCtrl(panel)
 	if ctrl ~= nil then
-		ctrl:Awake()
+		ctrl.Awake(...)
 	end
 end
 

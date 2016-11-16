@@ -49,10 +49,7 @@ function findPanel(str)
 end
 
 function showmessage(msg)
-	local ctrl = CtrlManager.GetCtrl(Ctrls.Message)
-	if ctrl ~= nil then
-		ctrl.Awake(msg)
-	end
+	CtrlManager.ShowPanel(Ctrls.Message, msg)
 end
 
 function classtype(name)

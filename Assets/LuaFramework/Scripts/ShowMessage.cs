@@ -9,7 +9,6 @@ public class ShowMessage : MonoBehaviour {
 	void Start () {
         transform.GetComponent<CanvasGroup>().DOFade(0, 1.5f);
         transform.DOLocalMoveY(200.0f, 1.5f).SetRelative().OnComplete(DestroySelf);
-        //transform.Find("Text").GetComponent<Text>().text = "hahahh";
 	}
 
     private void DestroySelf() {

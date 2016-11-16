@@ -75,6 +75,9 @@ end
 function event.rolelogin(_, resp)
 	destroy(gameObject)
 	if resp.ok then
+		UserData.uid = resp.uid
+		UserData.sex = resp.sex
+		UserData.rolename = resp.rolename
 		CtrlManager.ShowPanel(Ctrls.MainScene)
 	else
 		CtrlManager.ShowPanel(Ctrls.CreateRole)

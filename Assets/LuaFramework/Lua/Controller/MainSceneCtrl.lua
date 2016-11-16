@@ -31,13 +31,13 @@ function MainSceneCtrl.OnCreate(obj)
 end
 
 function MainSceneCtrl.BtnWar(go)
+	destroy(gameObject)
 	message.request("matching")
 end
 
 function event.matching(_, resp)
 	if resp.ok then
-		destroy(gameObject)
-		CtrlManager.ShowPanel(Ctrls.War)
+		CtrlManager.ShowPanel(Ctrls.War, {username=UserData.rolename, sex=UserData.sex}, {username=resp.rolename, sex=resp.sex})
 	end
 end
 

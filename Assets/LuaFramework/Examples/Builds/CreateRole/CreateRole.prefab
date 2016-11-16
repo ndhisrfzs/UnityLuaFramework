@@ -114,7 +114,7 @@ GameObject:
   - 224: {fileID: 22453192}
   - 222: {fileID: 22246874}
   - 114: {fileID: 11492072}
-  - 114: {fileID: 11460926}
+  - 114: {fileID: 114000011641768662}
   m_Layer: 0
   m_Name: Bg
   m_TagString: Untagged
@@ -622,7 +622,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11460926}
+      - m_Target: {fileID: 114000011641768662}
         m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
@@ -635,21 +635,6 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
---- !u!114 &11460926
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 130130}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc47ee7a451746d49a09d7886137c98f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  manRectTransform: {fileID: 22435242}
-  womanRectTransform: {fileID: 22490432}
-  manButton: {fileID: 11494800}
-  womanButton: {fileID: 11450308}
 --- !u!114 &11466140
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -797,7 +782,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11460926}
+      - m_Target: {fileID: 114000011641768662}
         m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
@@ -933,7 +918,7 @@ RectTransform:
   m_RootOrder: 1
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 171, y: -15}
+  m_AnchoredPosition: {x: 280, y: -15}
   m_SizeDelta: {x: 465, y: 540.69}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &22438548
@@ -1120,3 +1105,18 @@ Prefab:
   m_ParentPrefab: {fileID: 0}
   m_RootGameObject: {fileID: 119608}
   m_IsPrefabParent: 1
+--- !u!114 &114000011641768662
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 130130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bba7809308b6814d991334f883ffcad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manRectTransform: {fileID: 22435242}
+  womanRectTransform: {fileID: 22490432}
+  manButton: {fileID: 11494800}
+  womanButton: {fileID: 11450308}

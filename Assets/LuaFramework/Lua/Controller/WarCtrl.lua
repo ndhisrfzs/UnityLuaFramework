@@ -8,11 +8,13 @@ local gameObject
 local transform
 local behaviour
 local panel
-local player1
-local player2
+local player1 = {}
+local player2 = {}
 
-function WarCtrl.Awake()
+function WarCtrl.Awake(player1_data, player2_data)
 	message.handler(event)
+	player1.data = player1_data
+	player2.data = player2_data
 	panelMgr:CreatePanel(Panels.War, this.OnCreate)
 end
 
@@ -34,6 +36,9 @@ function WarCtrl.OnCreate(obj)
 	behaviour.onUpdate = this.Update
 
 	resMgr:LoadPrefab('war', { 'Cell', 'Baby-water', 'Baby-fire', 'Baby-wood', 'Baby-light', 'Baby-dark', 'Card' }, this.InitForm)
+
+	panel.name1.text = player1.data.username
+	panel.name2.text = player2.data.username
 end
 
 local form = { 
@@ -103,15 +108,19 @@ function WarCtrl.InitForm(objs)
 	end
 
 	resMgr:LoadPrefab('war', {'Role1', 'Role2'}, function (objs)
-		player1 = newObject(objs[0])
-		player1.name = 'Player1'
-		player1.transform:SetParent(transform)
-		player1.transform.localPosition = Vector3(-400, 55, 0)
+		local go = newObject(objs[player1.data.sex])
+		go.name = 'Player1'
+		go.transform:SetParent(transform)
+		go.transform.localPosition = Vector3(-400, 55, 0)
+		go.transform.localScale = Vector3(0.6, 0.6, 1)
+		player1.gameObject = go
 
-		player2 = newObject(objs[1])
-		player2.name = 'Player2'
-		player2.transform:SetParent(transform)
-		player2.transform.localPosition = Vector3(400, 55, 0)
+		go = newObject(objs[player2.data.sex])
+		go.name = 'Player2'
+		go.transform:SetParent(transform)
+		go.transform.localPosition = Vector3(400, 55, 0)
+		go.transform.localScale = Vector3(0.6, 0.6, 1)
+		player2.gameObject = go
 	end)
 end
 
