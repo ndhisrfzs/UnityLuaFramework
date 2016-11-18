@@ -22,7 +22,7 @@ namespace LuaFramework {
         /// 创建面板，请求资源管理器
         /// </summary>
         /// <param name="type"></param>
-        public void CreatePanel(string name, LuaFunction func = null) {
+        public void CreatePanel(string name, LuaFunction OnAwake = null, LuaFunction OnStart= null, LuaFunction OnUpdate = null, LuaFunction OnClick = null) {
             string assetName = name;
             string abName = name.ToLower() + AppConst.ExtName;
             //if (Parent.FindChild(name) != null) return;
@@ -39,9 +39,12 @@ namespace LuaFramework {
                 go.transform.SetParent(Parent, false);
                 go.transform.localScale = Vector3.one;
                 go.transform.localPosition = Vector3.zero;
-                go.AddComponent<LuaBehaviour>();
+                var behaviour = go.AddComponent<LuaBehaviour>();
+                behaviour.onStart = OnStart;
+                behaviour.onUpdate = OnUpdate;
+                behaviour.onClick = OnClick;
 
-                if (func != null) func.Call(go);
+                if (OnAwake != null) OnAwake.Call(go);
                 Debug.LogWarning("CreatePanel::>> " + name + " " + prefab);
             });
 #else
@@ -54,9 +57,13 @@ namespace LuaFramework {
             go.transform.SetParent(Parent, false);
             go.transform.localScale = Vector3.one;
             go.transform.localPosition = Vector3.zero;
-            go.AddComponent<LuaBehaviour>();
+            var behaviour = go.AddComponent<LuaBehaviour>();
+            behaviour.onAwake = OnAwake;
+            behaviour.onStart = OnStart;
+            behaviour.onUpdate = OnUpdate;
+            behaviour.onClick = OnClick;
 
-            if (func != null) func.Call(go);
+            //if (func != null) func.Call(go);
             Debug.LogWarning("CreatePanel::>> " + name + " " + prefab);
 #endif
         }

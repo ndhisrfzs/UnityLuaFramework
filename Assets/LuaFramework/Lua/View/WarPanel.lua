@@ -27,7 +27,8 @@ function WarPanel:InitPanel()
 	self.role1 = transform:FindChild("Role1")
 	self.role2 = transform:FindChild("Role2")
 	self.name1 = transform:FindChild("Name1/Text"):GetComponent('Text')
-	self.name2 = transform:FindChild("Name2/Text"):GetComponent('Text')
+	self.p2babys = transform:FindChild("P2Baby")
+	self.p2handcards = transform:FindChild("P2HandCards")
 end
 
 --单击事件--

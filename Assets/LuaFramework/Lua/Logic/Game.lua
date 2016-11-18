@@ -26,14 +26,9 @@ function Game.OnInitOK()
     InitFramework()
 
     PanelManager.Init()
-    CtrlManager.Init();
+    CtrlManager.Init()
 
-    local ctrl = CtrlManager.ShowPanel(Panels.Login)
-    --[[
-    if ctrl ~= nil and AppConst.ExampleMode == 1 then
-        ctrl:Awake()
-    end
-    ]]
+    CtrlManager.ShowPanel(Panels.Login)
        
     logWarn('LuaFramework InitOK--->>>')
 end

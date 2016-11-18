@@ -21,7 +21,14 @@ end
 function CtrlManager.ShowPanel(panel, ...)
 	local ctrl = CtrlManager.GetCtrl(panel)
 	if ctrl ~= nil then
-		ctrl.Awake(...)
+		ctrl.Init(...)
+	end
+end
+
+function CtrlManager.LoadPanel(panel)
+	local ctrl = CtrlManager.GetCtrl(panel)
+	if ctrl ~= nil then
+		ctrl.Load()
 	end
 end
 

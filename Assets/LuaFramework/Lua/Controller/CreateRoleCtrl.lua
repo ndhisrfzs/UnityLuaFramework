@@ -3,25 +3,25 @@ local event = {}
 local CreateRoleCtrl = {}
 local this = CreateRoleCtrl
 
-local CreateRolePanel
+local panel
 local createRole
 local transform
 local gameObject
 
-function CreateRoleCtrl.Awake()
-	panelMgr:CreatePanel(Panels.CreateRole, this.OnCreate)
+function CreateRoleCtrl.Init()
+	panelMgr:CreatePanel(Panels.CreateRole, this.Awake, this.Start, this.Update, this.Click)
 end
 
---启动事件--
-function CreateRoleCtrl.OnCreate(obj)
+function CreateRoleCtrl.Awake(go)
 	message.handler(event)
-	gameObject = obj
-	transform = obj.transform
-	CreateRolePanel = PanelManager.GetPanel(Panels.CreateRole)
+	gameObject = go
+	transform = go.transform
+	panel = PanelManager.GetPanel(Panels.CreateRole)
+	panel:Awake(go)
 
 	createRole = transform:GetComponent('LuaBehaviour')
-	createRole:AddButtonClick(CreateRolePanel.randName, this.RandName)
-	createRole:AddButtonClick(CreateRolePanel.btnLogin, this.Login)
+	createRole:AddButtonClick(panel.randName, this.RandName)
+	createRole:AddButtonClick(panel.btnLogin, this.Login)
 
 	message.request("rolename")
 end
@@ -32,16 +32,16 @@ end
 
 function CreateRoleCtrl.Login(go)
 	local sex = 0
-	if CreateRolePanel.btnSex1.interactable then
+	if panel.btnSex1.interactable then
 		sex = 0 
 	else
 		sex = 1 
 	end
-	message.request("rolecreate", { sex = sex, rolename=CreateRolePanel.roleName.text })
+	message.request("rolecreate", { sex = sex, rolename=panel.roleName.text })
 end
 
 function event.rolename(_, resp)
-	CreateRolePanel.roleName.text = resp.rolename
+	panel.roleName.text = resp.rolename
 end
 
 function event.rolecreate(req, resp)
@@ -57,7 +57,7 @@ function event.rolelogin(_, resp)
 		UserData.uid = resp.uid
 		UserData.sex = resp.sex
 		UserData.rolename = resp.rolename
-		destroy(gameObject)
+		this.Close()
 		CtrlManager.ShowPanel(Ctrls.MainScene)
 	else
 		showmessage("角色登录失败")

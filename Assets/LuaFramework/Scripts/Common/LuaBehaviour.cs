@@ -16,10 +16,6 @@ namespace LuaFramework {
         private Dictionary<GameObject, LuaFunction> scrollbarChanges = new Dictionary<GameObject, LuaFunction>();
         private Dictionary<GameObject, LuaFunction> dropdownChanges = new Dictionary<GameObject, LuaFunction>();
 
-        protected void Awake() {
-            Util.CallMethod("PanelManager", "Awake", name, gameObject);
-        }
-
         public LuaFunction onStart = null;
         public LuaFunction onUpdate = null;
         public LuaFunction onClick = null;

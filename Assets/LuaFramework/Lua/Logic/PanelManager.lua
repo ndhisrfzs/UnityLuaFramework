@@ -8,10 +8,6 @@ function PanelManager.Init()
     end
 end
 
-function PanelManager.Awake(panelName, go)
-	panelList[panelName]:Awake(go)
-end
-
 --添加控制器--
 function PanelManager.AddPanel(panelName, panelObj)
 	panelList[panelName] = panelObj

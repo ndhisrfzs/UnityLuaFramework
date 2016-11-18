@@ -4,22 +4,21 @@ local this = MessageCtrl
 local message
 local transform
 local gameObject
-local MessagePanel
-
+local panel
 local text
-function MessageCtrl.Awake(msg)
+
+function MessageCtrl.Init(msg)
 	text = msg
-	panelMgr:CreatePanel(Panels.Message, this.OnCreate)
+	panelMgr:CreatePanel(Panels.Message, this.Awake, this.Start, this.Update, this.Click)
 end
 
---启动事件--
-function MessageCtrl.OnCreate(obj)
-	gameObject = obj
-	MessagePanel = PanelManager.GetPanel(Panels.Message)
+function MessageCtrl.Awake(go)
+	gameObject = go
+	panel = PanelManager.GetPanel(Panels.Message)
+	panel:Awake(go)
 
-	--message = gameObject:GetComponent('LuaBehaviour')
-	log(text)
-	MessagePanel.message.text = text
+	--behaviour = gameObject:GetComponent('LuaBehaviour')
+	panel.message.text = text
 end
 
 --关闭事件--

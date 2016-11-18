@@ -1,7 +1,7 @@
 local babys = require "Common/baby"
 local event = {}
 
-WarCtrl = {}
+local WarCtrl = {}
 local this = WarCtrl
 
 local gameObject
@@ -11,11 +11,94 @@ local panel
 local player1 = {}
 local player2 = {}
 
-function WarCtrl.Awake(player1_data, player2_data)
+function WarCtrl.Init(player1_data, player2_data)
 	message.handler(event)
 	player1.data = player1_data
 	player2.data = player2_data
-	panelMgr:CreatePanel(Panels.War, this.OnCreate)
+	panelMgr:CreatePanel(Panels.War, this.Awake, this.Start, this.Update, this.Click)
+end
+
+function WarCtrl.Awake(go)
+	gameObject = go
+	transform = go.transform
+	panel = PanelManager.GetPanel(Panels.War)
+	panel:Awake(go)
+	
+	behaviour = transform:GetComponent('LuaBehaviour')
+
+	resMgr:LoadPrefab('war', { 'Cell' }, this.InitForm)
+
+	panel.name1.text = player1.data.username
+end
+
+local cards = { 'water', 'fire', 'wood', 'light', 'dark' }
+function event.initroom(_, resp)
+	local parent = panel.formGrid
+	for k,v in ipairs(resp.cards) do
+		local go = parent:FindChild('Item'..tostring(k)).gameObject
+		if v >= 1 then
+			resMgr:LoadSprite('war_asset', { cards[v] }, function (objs)
+				local image = go.transform:FindChild('Image')
+				image:GetComponent('Image').sprite = objs[0]
+				image.gameObject:SetActive(true)
+			end)
+		end
+	end
+	resMgr:LoadPrefab('war', { 'Baby-water', 'Baby-fire', 'Baby-wood', 'Baby-light', 'Baby-dark' }, function(objs)
+		for k,v in ipairs(resp.p1babys) do
+			local baby = babys[v] 
+			local go = newObject(objs[baby.attr - 1])
+			go.name = 'Baby'
+			go.transform:SetParent(panel.babys[k])
+			go.transform.localScale = Vector3.one
+			go.transform.localPosition = Vector3.zero
+			resMgr:LoadSprite('baby_asset', { baby.sprite }, function (objs)
+				go.gameObject:GetComponent('Image').sprite = objs[0]
+			end)
+		end
+
+		--P2
+		for k, v in ipairs(resp.p2babys) do
+			local baby = babys[v]
+			local go = newObject(objs[baby.attr - 1])
+			go.name = 'Baby'..tostring(k)
+			go.transform:SetParent(panel.p2babys)
+			go.transform.localScale = Vector3(0.9, 0.9, 1)
+			go.transform.localPosition = Vector3.zero
+			resMgr:LoadSprite('baby_asset', { baby.sprite }, function (objs)
+				go.gameObject:GetComponent('Image').sprite = objs[0]
+			end)
+		end
+	end)
+
+	resMgr:LoadPrefab('war', { 'Card' }, function(objs)
+		for k, v in ipairs(resp.p1handcards) do
+			local go = newObject(objs[0])
+			go.name = 'Card'
+			go.transform:SetParent(panel.cards[k])
+			go.transform.localScale = Vector3.one
+			go.transform.localPosition = Vector3.zero
+			resMgr:LoadSprite('war_asset', { cards[v] }, function (objs)
+				local image = go.transform:FindChild('Image')
+				image:GetComponent('Image').sprite = objs[0]
+				image.gameObject:AddComponent(classtype('DragMe'))
+			end)
+		end
+	end)
+
+	--P2
+	resMgr:LoadPrefab('war', { 'HandCard' }, function(objs)
+		for k, v in ipairs(resp.p2handcards) do
+			local go = newObject(objs[0])
+			go.name = 'Card'..tostring(k)
+			go.transform:SetParent(panel.p2handcards)
+			go.transform.localScale =  Vector3.one
+			go.transform.localPosition = Vector3.zero
+			resMgr:LoadSprite('war_asset', { cards[v] }, function (objs)
+				go.transform:GetComponent('Image').sprite = objs[0]
+			end)
+		end
+	end)
 end
 
 function WarCtrl.Start()
@@ -24,21 +107,7 @@ end
 function WarCtrl.Update()
 end
 
---启动事件--
-function WarCtrl.OnCreate(obj)
-	gameObject = obj
-	transform = obj.transform
-	panel = PanelManager.GetPanel(Panels.War)
-
-	--gameObject:AddComponent(classtype('DropMe'))
-	behaviour = transform:GetComponent('LuaBehaviour')
-	behaviour.onStart = this.Start
-	behaviour.onUpdate = this.Update
-
-	resMgr:LoadPrefab('war', { 'Cell', 'Baby-water', 'Baby-fire', 'Baby-wood', 'Baby-light', 'Baby-dark', 'Card' }, this.InitForm)
-
-	panel.name1.text = player1.data.username
-	panel.name2.text = player2.data.username
+function WarCtrl.Click(...)
 end
 
 local form = { 
@@ -57,8 +126,6 @@ local face_index = {
 	[21] = 5, [22] = 2, [23] = 3, [24] = 4, [25] = 1,
 }
 
-local cards = { 'water', 'fire', 'wood', 'light', 'dark' }
-
 function WarCtrl.InitForm(objs)
 	math.randomseed(os.time())
 	local parent = panel.formGrid
@@ -69,45 +136,14 @@ function WarCtrl.InitForm(objs)
 		go.transform:SetParent(parent)
 		go.transform.localScale = Vector3.one
 		go.transform.localPosition = Vector3.zero
-		if form[i] == 1 then
-			resMgr:LoadSprite('war_asset', { cards[math.random(5)] }, function (objs)
-				local image = go.transform:FindChild("Image")
-				image:GetComponent('Image').sprite = objs[0]
-				image.gameObject:SetActive(true)
-				end)
-		else
+		if form[i] ~= 1 then
 			go:AddComponent(classtype('DropMe'))
-			local dropMe = go.transform:GetComponent("DropMe")
+			local dropMe = go.transform:GetComponent('DropMe')
 			dropMe.luafunc = this.Drop
 		end
 	end
 
-	for i = 1, 5 do
-		local baby = babys[math.random(#babys)] 
-		local go = newObject(objs[baby.attr])
-		go.name = 'Baby'
-		go.transform:SetParent(panel.babys[i])
-		go.transform.localScale = Vector3.one
-		go.transform.localPosition = Vector3.zero
-		resMgr:LoadSprite('baby_asset', { baby.sprite }, function (objs)
-			go.gameObject:GetComponent('Image').sprite = objs[0]
-		end)
-	end
-
-	for i=1, 4 do
-		local go = newObject(objs[6])
-		go.name = 'Card'
-		go.transform:SetParent(panel.cards[i])
-		go.transform.localScale = Vector3.one
-		go.transform.localPosition = Vector3.zero
-		resMgr:LoadSprite('war_asset', { cards[math.random(5)] }, function (objs)
-			local image = go.transform:FindChild('Image')
-			image:GetComponent('Image').sprite = objs[0]
-			image.gameObject:AddComponent(classtype('DragMe'))
-		end)
-	end
-
-	resMgr:LoadPrefab('war', {'Role1', 'Role2'}, function (objs)
+	resMgr:LoadPrefab('war', {'Role2', 'Role1'}, function (objs)
 		local go = newObject(objs[player1.data.sex])
 		go.name = 'Player1'
 		go.transform:SetParent(transform)
@@ -120,8 +156,13 @@ function WarCtrl.InitForm(objs)
 		go.transform:SetParent(transform)
 		go.transform.localPosition = Vector3(400, 55, 0)
 		go.transform.localScale = Vector3(0.6, 0.6, 1)
+		local info = go.transform:FindChild('Info')
+		info:FindChild('Name'):GetComponent('Text').text = player2.data.username
+		info.gameObject:SetActive(true)
 		player2.gameObject = go
 	end)
+	
+	message.request('initroom')
 end
 
 local used_cards = {}

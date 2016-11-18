@@ -7,30 +7,30 @@ local panel
 local prompt
 local transform
 local gameObject
-local PromptPanel
+local panel
 
-function PromptCtrl.Awake()
+function PromptCtrl.Init()
 	message.handler(event)
-	panelMgr:CreatePanel(Panels.Prompt, this.OnCreate)
+	panelMgr:CreatePanel(Panels.Prompt, this.Awake, this.Start, this.Update, this.Click)
 end
 
---启动事件--
-function PromptCtrl.OnCreate(obj)
-	gameObject = obj
-	transform = obj.transform
-	PromptPanel = PanelManager.GetPanel(Panels.Prompt)
+function PromptCtrl.Awake(go)
+	gameObject = go
+	transform = go.transform
+	panel = PanelManager.GetPanel(Panels.Prompt)
+	panel:Awake(go)
 
 	panel = transform:GetComponent('UIPanel')
 	prompt = transform:GetComponent('LuaBehaviour')
 
-	prompt:AddButtonClick(PromptPanel.btnOpen, this.OnClick)
+	prompt:AddButtonClick(panel.btnOpen, this.OnClick)
 	resMgr:LoadPrefab('prompt', { 'PromptItem' }, this.InitPanel)
 end
 
 --初始化面板--
 function PromptCtrl.InitPanel(objs)
 	local count = 100
-	local parent = PromptPanel.gridParent
+	local parent = panel.gridParent
 	for i = 1, count do
 		local go = newObject(objs[0])
 		go.name = 'Item'..tostring(i)

@@ -65,3 +65,13 @@ matching 8 {
 		rolename 3 : string
 	}
 }
+
+initroom 9 {
+	response {
+		cards 0 : *integer
+		p1babys 1 : *integer
+		p1handcards 2 : *integer
+		p2babys 3 : *integer
+		p2handcards 4 : *integer
+	}
+}
