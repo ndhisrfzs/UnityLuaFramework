@@ -31,6 +31,7 @@ function WarCtrl.Awake(go)
 	panel.name1.text = player1.data.username
 end
 
+local handcard_to_index = {}
 local cards = { 'water', 'fire', 'wood', 'light', 'dark' }
 function event.initroom(_, resp)
 	local parent = panel.formGrid
@@ -75,6 +76,7 @@ function event.initroom(_, resp)
 		for k, v in ipairs(resp.p1handcards) do
 			local go = newObject(objs[0])
 			go.name = 'Card'
+			handcard_to_index[panel.cards[k].name] = k
 			go.transform:SetParent(panel.cards[k])
 			go.transform.localScale = Vector3.one
 			go.transform.localPosition = Vector3.zero
@@ -117,7 +119,7 @@ local form = {
 	0, 1, 1, 1, 0, 
 	0, 0, 0, 0, 0, 
 } 
-local name_to_index = {}
+local card_to_index = {}
 local face_index = {
 	[1] = 25, [2] = 22, [3] = 23, [4] = 24, [5] = 21,
 	[6] = 10, 								[10] = 6,
@@ -132,7 +134,7 @@ function WarCtrl.InitForm(objs)
 	for i = 1, 25 do
 		local go = newObject(objs[0])
 		go.name = 'Item'..tostring(i)
-		name_to_index[go.name] = i
+		card_to_index[go] = i
 		go.transform:SetParent(parent)
 		go.transform.localScale = Vector3.one
 		go.transform.localPosition = Vector3.zero
@@ -169,7 +171,8 @@ local used_cards = {}
 function WarCtrl.Drop(...)
 	local go, name = ...
 	used_cards[#used_cards + 1] = name
-	local index = name_to_index[go.name]
+	local index = card_to_index[go]
+	local handcard_index = handcard_to_index[name]
 	local face = face_index[index]
 	local parent = panel.formGrid
 	for k, v in pairs(face_index) do
@@ -177,6 +180,7 @@ function WarCtrl.Drop(...)
 			destroy(parent:FindChild('Item'..tostring(k)):GetComponent('DropMe'))
 		end
 	end
+	message.request("drag", { handcard = handcard_index, goalpos = index })
 	--[[
 	if #used_cards == 2 then
 		for i = 1, 4 do
@@ -184,6 +188,20 @@ function WarCtrl.Drop(...)
 		end
 	end
 	]]
+end
+
+local function getcard(index)
+	for k, v in pairs(card_to_index) do
+		if v == index then
+			return k
+		end
+	end
+end
+
+function event.dragdata(req)
+	local card = getcard(req.goalpos)
+	local dragmovie = panel.p2handcards:FindChild('Card'..tostring(req.handcard)):GetComponent('DragMovie')
+	dragmovie:Move(card)
 end
 
 --关闭事件--

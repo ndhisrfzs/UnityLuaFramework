@@ -41,14 +41,23 @@ end
 function message.update(buffer)
 	local buf = buffer:ReadBuffer()
     local t, session_id, resp, err = var.host:dispatch(buf)
-	assert(t == "RESPONSE")
-	local session = var.session[session_id]
-	var.session[session_id] = nil
-	local f = assert(var.handler[session.name])
-	if not err then
-		f(session.req, resp, session_id)
-	else
-		print(string.format("session [%d] error : %s", session_id, err))
+    if t == "REQUEST" then
+    	local f = assert(var.handler[session_id])
+    	if not err then
+			f(resp)
+		else
+			log(string.format("session [%d] error : %s", session_id, err))
+		end
+    else
+		assert(t == "RESPONSE")
+		local session = var.session[session_id]
+		var.session[session_id] = nil
+		local f = assert(var.handler[session.name])
+		if not err then
+			f(session.req, resp, session_id)
+		else
+			log(string.format("session [%d] error : %s", session_id, err))
+		end
 	end
 	return true
 end

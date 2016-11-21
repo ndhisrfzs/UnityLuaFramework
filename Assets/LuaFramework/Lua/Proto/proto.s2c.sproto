@@ -4,3 +4,10 @@
 }
 
 heartbeat 1 {}
+
+dragdata 2 {
+	request {
+		handcard 0 : integer
+		goalpos 1 : integer
+	}
+}

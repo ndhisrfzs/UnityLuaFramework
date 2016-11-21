@@ -75,3 +75,10 @@ initroom 9 {
 		p2handcards 4 : *integer
 	}
 }
+
+drag 10 {
+	request {
+		handcard 0 : integer
+		goalpos 1 : integer
+	}
+}

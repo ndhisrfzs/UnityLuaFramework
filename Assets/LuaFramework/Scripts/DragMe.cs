@@ -21,7 +21,7 @@ public class DragMe : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHa
 		// What we want to do is create an icon for this.
 		m_DraggingIcon = new GameObject("icon");
 
-		m_DraggingIcon.transform.SetParent (canvas.transform, false);
+		m_DraggingIcon.transform.SetParent(canvas.transform, false);
 		m_DraggingIcon.transform.SetAsLastSibling();
 
 		var image = m_DraggingIcon.AddComponent<Image>();

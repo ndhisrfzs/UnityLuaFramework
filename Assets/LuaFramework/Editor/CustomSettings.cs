@@ -158,6 +158,7 @@ public static class CustomSettings
 
         _GT(typeof(DropMe)),		  
         _GT(typeof(DragMe)),		  
+        _GT(typeof(DragMovie)),		  
     };
 
     public static List<Type> dynamicList = new List<Type>()
