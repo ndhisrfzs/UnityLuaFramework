@@ -146,6 +146,7 @@ public static class CustomSettings
         _GT(typeof(LuaHelper)),
         _GT(typeof(ByteBuffer)),
         _GT(typeof(LuaBehaviour)),
+        _GT(typeof(NotiConst)),
 
         _GT(typeof(GameManager)),
         _GT(typeof(LuaManager)),
@@ -159,6 +160,8 @@ public static class CustomSettings
         _GT(typeof(DropMe)),		  
         _GT(typeof(DragMe)),		  
         _GT(typeof(DragMovie)),		  
+
+        _GT(typeof(AppFacade)),		  
     };
 
     public static List<Type> dynamicList = new List<Type>()

@@ -8,6 +8,7 @@ public class DragMovieWrap
 	{
 		L.BeginClass(typeof(DragMovie), typeof(UnityEngine.MonoBehaviour));
 		L.RegFunction("Move", Move);
+		L.RegFunction("SetImage", SetImage);
 		L.RegFunction("__eq", op_Equality);
 		L.RegFunction("__tostring", ToLua.op_ToString);
 		L.EndClass();
@@ -22,6 +23,22 @@ public class DragMovieWrap
 			DragMovie obj = (DragMovie)ToLua.CheckObject(L, 1, typeof(DragMovie));
 			UnityEngine.GameObject arg0 = (UnityEngine.GameObject)ToLua.CheckUnityObject(L, 2, typeof(UnityEngine.GameObject));
 			obj.Move(arg0);
+			return 0;
+		}
+		catch(Exception e)
+		{
+			return LuaDLL.toluaL_exception(L, e);
+		}
+	}
+
+	[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+	static int SetImage(IntPtr L)
+	{
+		try
+		{
+			ToLua.CheckArgsCount(L, 1);
+			DragMovie obj = (DragMovie)ToLua.CheckObject(L, 1, typeof(DragMovie));
+			obj.SetImage();
 			return 0;
 		}
 		catch(Exception e)

@@ -70,6 +70,8 @@ namespace LuaFramework {
 
             //释放所有文件到数据目录
             string[] files = File.ReadAllLines(outfile);
+            facade.SendMessageCommand(NotiConst.SET_PROGRESS_MAX, files.Length);
+            int count = 0;
             foreach (var file in files) {
                 string[] fs = file.Split('|');
                 infile = resPath + fs[0];  //
@@ -97,6 +99,7 @@ namespace LuaFramework {
                     File.Copy(infile, outfile, true);
                 }
                 yield return new WaitForEndOfFrame();
+                facade.SendMessageCommand(NotiConst.SET_PROGRESS, ++count);
             }
             message = "解包完成!!!";
             facade.SendMessageCommand(NotiConst.UPDATE_MESSAGE, message);
@@ -118,8 +121,7 @@ namespace LuaFramework {
             string dataPath = Util.DataPath;  //数据目录
             string url = AppConst.WebUrl;
             string message = string.Empty;
-            string random = DateTime.Now.ToString("yyyymmddhhmmss");
-            string listUrl = url + "files.txt?v=" + random;
+            string listUrl = url + "files.txt";
             Debug.LogWarning("LoadUpdate---->>>" + listUrl);
 
             WWW www = new WWW(listUrl); yield return www;
@@ -134,8 +136,13 @@ namespace LuaFramework {
             string filesText = www.text;
             string[] files = filesText.Split('\n');
 
+            facade.SendMessageCommand(NotiConst.SET_PROGRESS_MAX, files.Length);
             for (int i = 0; i < files.Length; i++) {
-                if (string.IsNullOrEmpty(files[i])) continue;
+                if (string.IsNullOrEmpty(files[i]))
+                {
+                    continue;
+                    facade.SendMessageCommand(NotiConst.SET_PROGRESS, i);
+                }
                 string[] keyValue = files[i].Split('|');
                 string f = keyValue[0];
                 string localfile = (dataPath + f).Trim();
@@ -143,7 +150,7 @@ namespace LuaFramework {
                 if (!Directory.Exists(path)) {
                     Directory.CreateDirectory(path);
                 }
-                string fileUrl = url + f + "?v=" + random;
+                string fileUrl = url + f;
                 bool canUpdate = !File.Exists(localfile);
                 if (!canUpdate) {
                     string remoteMd5 = keyValue[1].Trim();
@@ -153,8 +160,8 @@ namespace LuaFramework {
                 }
                 if (canUpdate) {   //本地缺少文件
                     Debug.Log(fileUrl);
-                    message = "downloading>>" + fileUrl;
-                    facade.SendMessageCommand(NotiConst.UPDATE_MESSAGE, message + " " + localfile);
+                    message = "下载文件>>" + f;
+                    facade.SendMessageCommand(NotiConst.UPDATE_MESSAGE, message);
                     www = new WWW(fileUrl); yield return www;
                     if (www.error != null) {
                         OnUpdateFailed(path);   //
@@ -165,6 +172,7 @@ namespace LuaFramework {
                     //BeginDownload(fileUrl, localfile);
                     //while (!(IsDownOK(localfile))) { yield return new WaitForEndOfFrame(); }
                 }
+                facade.SendMessageCommand(NotiConst.SET_PROGRESS, i);
             }
             yield return new WaitForEndOfFrame();
 

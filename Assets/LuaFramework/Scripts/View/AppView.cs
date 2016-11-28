@@ -2,10 +2,12 @@
 using UnityEngine.UI;
 using LuaFramework;
 using System.Collections.Generic;
+using System;
 
 public class AppView : View {
     private string message;
     public Text text; 
+    public Slider slider;
 
     ///<summary>
     /// 监听的消息
@@ -18,6 +20,9 @@ public class AppView : View {
                 NotiConst.UPDATE_EXTRACT,
                 NotiConst.UPDATE_DOWNLOAD,
                 NotiConst.UPDATE_PROGRESS,
+                NotiConst.SET_PROGRESS_MAX,
+                NotiConst.SET_PROGRESS,
+                NotiConst.SET_ACTIVE,
             };
         }
     }
@@ -37,16 +42,25 @@ public class AppView : View {
         switch (name) {
             case NotiConst.UPDATE_MESSAGE:      //更新消息
                 UpdateMessage(body.ToString());
-            break;
+                break;
             case NotiConst.UPDATE_EXTRACT:      //更新解压
                 UpdateExtract(body.ToString());
-            break;
+                break;
             case NotiConst.UPDATE_DOWNLOAD:     //更新下载
                 UpdateDownload(body.ToString());
-            break;
+                break;
             case NotiConst.UPDATE_PROGRESS:     //更新下载进度
                 UpdateProgress(body.ToString());
-            break;
+                break;
+            case NotiConst.SET_PROGRESS_MAX:
+                SetProgressMax(Convert.ToInt32(body));
+                break;
+            case NotiConst.SET_PROGRESS:
+                SetProgress(Convert.ToInt32(body));
+                break;
+            case NotiConst.SET_ACTIVE:
+                SetActive(Convert.ToBoolean(body));
+                break;
         }
     }
 
@@ -66,8 +80,33 @@ public class AppView : View {
         this.message = data;
     }
 
-    void OnGUI() {
+    public void SetProgressMax(int max)
+    {
+        slider.value = 0;
+        slider.maxValue = max;
+    }
+
+    public void SetProgress(int value)
+    {
+        slider.value = value;
+    }
+
+    public void SetActive(bool active)
+    {
+        if (active)
+            transform.SetSiblingIndex(-1);
+        else
+            transform.SetSiblingIndex(0);
+        gameObject.SetActive(active);
+    }
+
+    void Update()
+    {
         text.text = message;
+    }
+
+    void OnGUI() {
+        //text.text = message;
         /*
         GUI.Label(new Rect(10, 120, 960, 50), message);
 

@@ -21,6 +21,7 @@ end
 function WarCtrl.Awake(go)
 	gameObject = go
 	transform = go.transform
+	transform:SetSiblingIndex(0)
 	panel = PanelManager.GetPanel(Panels.War)
 	panel:Awake(go)
 	
@@ -42,6 +43,7 @@ function event.initroom(_, resp)
 				local image = go.transform:FindChild('Image')
 				image:GetComponent('Image').sprite = objs[0]
 				image.gameObject:SetActive(true)
+				AppFacade.Instance:SendMessageCommand(NotiConst.SET_PROGRESS, 1)
 			end)
 		end
 	end
@@ -55,6 +57,7 @@ function event.initroom(_, resp)
 			go.transform.localPosition = Vector3.zero
 			resMgr:LoadSprite('baby_asset', { baby.sprite }, function (objs)
 				go.gameObject:GetComponent('Image').sprite = objs[0]
+				AppFacade.Instance:SendMessageCommand(NotiConst.SET_PROGRESS, 2)
 			end)
 		end
 
@@ -68,6 +71,7 @@ function event.initroom(_, resp)
 			go.transform.localPosition = Vector3.zero
 			resMgr:LoadSprite('baby_asset', { baby.sprite }, function (objs)
 				go.gameObject:GetComponent('Image').sprite = objs[0]
+				AppFacade.Instance:SendMessageCommand(NotiConst.SET_PROGRESS, 3)
 			end)
 		end
 	end)
@@ -83,13 +87,15 @@ function event.initroom(_, resp)
 			resMgr:LoadSprite('war_asset', { cards[v] }, function (objs)
 				local image = go.transform:FindChild('Image')
 				image:GetComponent('Image').sprite = objs[0]
-				image.gameObject:AddComponent(classtype('DragMe'))
+				image.gameObject:AddComponent(typeof(DragMe))
+				AppFacade.Instance:SendMessageCommand(NotiConst.SET_PROGRESS, 4)
 			end)
 		end
 	end)
 
 	--P2
 	resMgr:LoadPrefab('war', { 'HandCard' }, function(objs)
+		local count = 0
 		for k, v in ipairs(resp.p2handcards) do
 			local go = newObject(objs[0])
 			go.name = 'Card'..tostring(k)
@@ -98,8 +104,14 @@ function event.initroom(_, resp)
 			go.transform.localPosition = Vector3.zero
 			resMgr:LoadSprite('war_asset', { cards[v] }, function (objs)
 				go.transform:GetComponent('Image').sprite = objs[0]
+				count = count + 1
+				if count == 4 then
+					AppFacade.Instance:SendMessageCommand(NotiConst.SET_PROGRESS, 5)
+					AppFacade.Instance:SendMessageCommand(NotiConst.SET_ACTIVE, false)
+				end
 			end)
 		end
+
 	end)
 end
 
@@ -139,7 +151,7 @@ function WarCtrl.InitForm(objs)
 		go.transform.localScale = Vector3.one
 		go.transform.localPosition = Vector3.zero
 		if form[i] ~= 1 then
-			go:AddComponent(classtype('DropMe'))
+			go:AddComponent(typeof(DropMe))
 			local dropMe = go.transform:GetComponent('DropMe')
 			dropMe.luafunc = this.Drop
 		end

@@ -94,11 +94,11 @@ namespace LuaFramework {
                 loader.AddBundle("lua/lua_controller.unity3d");
                 loader.AddBundle("lua/lua_misc.unity3d");
 
-                loader.AddBundle("lua/lua_protobuf.unity3d");
+                //loader.AddBundle("lua/lua_protobuf.unity3d");
                 loader.AddBundle("lua/lua_3rd_cjson.unity3d");
                 loader.AddBundle("lua/lua_3rd_luabitop.unity3d");
-                loader.AddBundle("lua/lua_3rd_pbc.unity3d");
-                loader.AddBundle("lua/lua_3rd_pblua.unity3d");
+                //loader.AddBundle("lua/lua_3rd_pbc.unity3d");
+                //loader.AddBundle("lua/lua_3rd_pblua.unity3d");
                 loader.AddBundle("lua/lua_3rd_sproto.unity3d");
             }
         }

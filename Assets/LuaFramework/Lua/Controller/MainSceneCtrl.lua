@@ -41,6 +41,9 @@ end
 
 function MainSceneCtrl.BtnWar(go)
 	this.Close()
+	AppFacade.Instance:SendMessageCommand(NotiConst.SET_ACTIVE, true)
+	AppFacade.Instance:SendMessageCommand(NotiConst.UPDATE_MESSAGE, "匹配对手中...")
+	AppFacade.Instance:SendMessageCommand(NotiConst.SET_PROGRESS_MAX, 5)
 	message.request("matching")
 end
 

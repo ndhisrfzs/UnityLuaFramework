@@ -29,6 +29,8 @@ function Game.OnInitOK()
     CtrlManager.Init()
 
     CtrlManager.ShowPanel(Panels.Login)
+
+    --AppFacade.Instance:SendMessageCommand(NotiConst.UPDATE_MESSAGE, "hello")
        
     logWarn('LuaFramework InitOK--->>>')
 end
